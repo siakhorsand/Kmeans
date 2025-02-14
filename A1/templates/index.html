@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>K-means Clustering Visualization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>K-means Clustering Visualization</h1>
+        
+        <div class="controls">
+            <div class="slider-container">
+                <label for="k">Number of Clusters (k):</label>
+                <input type="range" id="k" min="2" max="10" value="3">
+                <span id="k-value">3</span>
+            </div>
+            <div class="dataset-container">
+                <label for="dataset">Dataset:</label>
+                <select id="dataset" onchange="selectDataset()">
+                    <option value="X1">Dataset X1</option>
+                    <option value="X2">Dataset X2</option>
+                    <option value="X3">Dataset X3</option>
+                </select>
+            </div>
+            <div class="button-container">
+                <button onclick="runClustering()">Run Clustering</button>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <canvas id="plot"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
