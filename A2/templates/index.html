@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Clustering Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Advanced Clustering Visualization</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Controls Panel -->
+            <div class="bg-white p-6 rounded-lg shadow-lg controls">
+                <h2 class="text-xl font-semibold mb-4">Controls</h2>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2">Clustering Method</label>
+                    <select id="clusteringMethod" class="w-full p-2 border rounded">
+                        <option value="kmeans">K-means Clustering</option>
+                        <option value="em">EM Algorithm (Gaussian Mixture)</option>
+                        <option value="hierarchical">Hierarchical Clustering</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2">Number of Clusters</label>
+                    <input type="range" id="numClusters" min="2" max="8" value="3" class="w-full">
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>2</span>
+                        <span id="numClustersValue">3</span>
+                        <span>8</span>
+                    </div>
+                </div>
+                
+                <button id="runButton" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mb-4">
+                    Run Clustering
+                </button>
+                
+                <div id="methodInfo" class="text-sm text-gray-600 mt-4">
+                    <h3 class="font-semibold mb-2">Method Information:</h3>
+                    <div id="kmeans-info" class="method-info">
+                        <p>K-means clustering partitions data into k clusters by minimizing within-cluster variances.</p>
+                    </div>
+                    <div id="em-info" class="method-info hidden">
+                        <p>EM Algorithm fits a mixture of Gaussian distributions to the data using expectation-maximization.</p>
+                    </div>
+                    <div id="hierarchical-info" class="method-info hidden">
+                        <p>Hierarchical clustering creates a tree of nested clusters using Ward's minimum variance method.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status Panel -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Status</h2>
+                <div id="statusPanel" class="text-sm"></div>
+                
+                <div class="mt-6">
+                    <h3 class="font-semibold mb-2">Statistics:</h3>
+                    <div id="statsPanel" class="text-sm">
+                        <p>Waiting for clustering results...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dataset Info -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Dataset Information</h2>
+                <div class="text-sm">
+                    <p class="mb-2">This visualization uses student performance data with the following features:</p>
+                    <ul class="list-disc pl
