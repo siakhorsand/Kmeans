@@ -9,7 +9,6 @@ from scipy.stats import multivariate_normal
 import traceback
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -26,20 +25,19 @@ class EMModel:
         self.X = X
         self.N, self.dim = X.shape
         
-        # Initialize parameters
+        
         indices = np.random.choice(self.N, self.k, replace=False)
         self.mu = self.X[indices]
         self.pi = np.ones(self.k) / self.k
         self.sigma = np.array([np.eye(self.dim) * 5.0 for _ in range(self.k)])
         
         for _ in range(self.max_iters):
-            # E-step
+            
             r = self._expectation()
             
-            # M-step
+            
             self._maximization(r)
         
-        # Get final assignments
         r = self._expectation()
         labels = r.argmax(axis=1)
         
@@ -61,35 +59,34 @@ class EMModel:
                 logger.error(f"Error in _expectation for cluster {c}: {str(e)}")
                 raise
             
-        # Normalize responsibilities
+       
         r_sum = r.sum(axis=1, keepdims=True)
-        r_sum[r_sum == 0] = 1e-10  # Avoid division by zero
+        r_sum[r_sum == 0] = 1e-10  # avoid division by zero
         r = r / r_sum
         return r
     
     def _maximization(self, r):
         """M-step: update parameters"""
-        # Update means
+        
         r_sum = r.sum(axis=0)
-        r_sum[r_sum == 0] = 1e-10  # Avoid division by zero
+        r_sum[r_sum == 0] = 1e-10  
         self.mu = r.T @ self.X / r_sum[:, np.newaxis]
         
-        # Update mixing coefficients
+       
         self.pi = r_sum / self.N
-        
-        # Update covariances
+       
         for c in range(self.k):
             diff = self.X - self.mu[c]
             self.sigma[c] = (r[:, c:c+1] * diff).T @ diff / r_sum[c]
-            # Add small constant to diagonal for numerical stability
+           
             self.sigma[c] += np.eye(self.dim) * 1e-6
 
 def load_and_preprocess_data():
     """Load and preprocess the student data"""
     try:
         data = pd.read_csv('PA2_data.csv')
-        X = data.iloc[:, 1:].to_numpy()  # Skip ID column
-        X = X / X.max(axis=0)  # Scale to [0,1] range
+        X = data.iloc[:, 1:].to_numpy()  
+        X = X / X.max(axis=0)  
         return X
     except Exception as e:
         logger.error(f"Error loading data: {str(e)}")
