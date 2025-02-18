@@ -1,35 +1,34 @@
-# app.py
 from flask import Flask, request, jsonify, render_template
 import numpy as np
-from kmeans_original import KmeansModel
+from kmeans_model import KmeansModel
 from sklearn.datasets import make_blobs
 
 app = Flask(__name__)
 
 def get_X1():
     """Get X1 dataset from notebook implementation"""
-    X, Y = make_blobs(cluster_std=1.5, random_state=20, n_samples=500, centers=3)
+    X, _ = make_blobs(cluster_std=1.5, random_state=20, n_samples=500, centers=3)
     X1 = np.dot(X, np.random.RandomState(0).randn(2, 2))
     return X1
 
 def get_X2():
     """Get X2 dataset from notebook implementation"""
     centers = [[4, 7], [9, 9], [9, 2]]
-    X2, Y2 = make_blobs(cluster_std=1.5, random_state=20, n_samples=500, centers=centers)
+    X2, _ = make_blobs(cluster_std=1.5, random_state=20, n_samples=500, centers=centers)
     X2 = np.dot(X2, np.random.RandomState(0).randn(2, 2))
     return X2
 
 def get_X3():
     """Get X3 dataset from notebook implementation"""
     centers = [[5, 5]]
-    X31, Y31 = make_blobs(cluster_std=1.5, random_state=20, n_samples=200, centers=centers)
+    X31, _ = make_blobs(cluster_std=1.5, random_state=20, n_samples=200, centers=centers)
     X31 = np.dot(X31, np.array([[1.0, 0], [0, 5.0]]))
     
-    X32, Y32 = make_blobs(cluster_std=1.5, random_state=20, n_samples=200, centers=centers)
+    X32, _ = make_blobs(cluster_std=1.5, random_state=20, n_samples=200, centers=centers)
     X32 = np.dot(X32, np.array([[5.0, 0], [0, 1.0]]))
     
     centers = [[7, 7]]
-    X33, Y33 = make_blobs(cluster_std=1.5, random_state=20, n_samples=100, centers=centers)
+    X33, _ = make_blobs(cluster_std=1.5, random_state=20, n_samples=100, centers=centers)
     X33 = np.dot(X33, np.random.RandomState(0).randn(2, 2))
     
     X3 = np.vstack((X31, X32, X33))
@@ -80,5 +79,4 @@ def cluster():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    app.run(debug=True)

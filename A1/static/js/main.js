@@ -1,4 +1,3 @@
-
 let data = [];
 let chart;
 
@@ -9,21 +8,30 @@ function initChart() {
         data: {
             datasets: [{
                 data: [],
-                backgroundColor: 'blue'
+                backgroundColor: 'blue',
+                label: 'Data Points'
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
             scales: {
                 x: {
-                    beginAtZero: false,
+                    type: 'linear',
+                    position: 'bottom',
                     title: {
                         display: true,
                         text: 'X'
                     }
                 },
                 y: {
-                    beginAtZero: false,
+                    type: 'linear',
                     title: {
                         display: true,
                         text: 'Y'
@@ -51,6 +59,7 @@ async function selectDataset() {
         updateChart(data);
     } catch (error) {
         console.error('Error loading dataset:', error);
+        alert('Error loading dataset. Please try again.');
     }
 }
 
@@ -58,7 +67,6 @@ function updateChart(points, labels = null) {
     const colors = ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'];
     
     if (labels) {
-        // Handle clustered data
         const datasets = [];
         const uniqueLabels = [...new Set(labels)];
         uniqueLabels.forEach((label, i) => {
@@ -70,7 +78,6 @@ function updateChart(points, labels = null) {
         });
         chart.data.datasets = datasets;
     } else {
-        // Handle unclustered data
         chart.data.datasets = [{
             data: points,
             backgroundColor: 'blue',
@@ -96,30 +103,37 @@ async function runClustering() {
             })
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
+        
+        if (result.error) {
+            throw new Error(result.error);
+        }
         
         updateChart(data, result.labels);
         
-        // Add centroids
         chart.data.datasets.push({
             data: result.centroids.map(c => ({x: c[0], y: c[1]})),
             backgroundColor: 'black',
-            pointRadius: 8,
+            pointRadius: 20,
             pointStyle: 'crossRot',
             label: 'Centroids'
         });
         chart.update();
     } catch (error) {
         console.error('Error running clustering:', error);
+        alert('Error running clustering. Please try again.');
     }
 }
 
-// Initialize on page load
+
 window.onload = function() {
     initChart();
-    selectDataset(); // Load initial dataset
-    
-    // Add event listener for k slider
+    selectDataset(); 
+
     document.getElementById('k').addEventListener('input', function(e) {
         document.getElementById('k-value').textContent = e.target.value;
     });
