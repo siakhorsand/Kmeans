@@ -5,7 +5,12 @@ Interactive web app for visualizing K-means clustering algorithm on different da
 ### Demo GIF
 ![K-means Clustering Demo](A1/static/images/KmeansDemo.gif)
 
-# A2: EM and Kmeans Visualization
-in the works... 
+# A2: Clustering Algorithms Comparison
 
-![EM Clustering Demo](A2/static/images/KmeansDemo.gif)
+A web application for exploring multiple clustering algorithms (K-means, EM, Hierarchical) on student data with PCA dimensionality reduction.
+
+![Clustering Visualization](A2/static/images/A2.gif)
+
+## Technologies
+- Flask, Python, NumPy, Pandas, scikit-learn
+- Interactive visualization with HTML, CSS, JavaScript
